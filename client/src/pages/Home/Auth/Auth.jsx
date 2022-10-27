@@ -1,9 +1,17 @@
 import React, { useState } from 'react'
 import './Auth.css'
 import Logo from '../../../img/logo.png'
+import { useDispatch, useSelector } from 'react-redux'
+import { logIn, signUp } from '../../../actions/AuthActions'
+
 
 const Auth = () => {
+  const dispatch =useDispatch()
+  // const loading = useSelector((state) => state.authReducer.loading);
+
   const [isSignup, setSignup] = useState(true)
+  // console.log(loading)
+ 
   const [data, setData] = useState({ firstname: "", lastname: "", password: "", confirmpass: "", username: "" })
   const [confirmPass, setConfirmPass] = useState(true)
 
@@ -15,10 +23,11 @@ const Auth = () => {
     e.preventDefault();
 
     if (isSignup) {
-      if (data.password !== data.confirmpass) {
-        setConfirmPass(false)
-      }
-
+      data.password === data.confirmpass ?
+        dispatch(signUp(data))
+        : setConfirmPass(false)
+    } else {
+      dispatch(logIn(data))
 
     }
   }
@@ -126,7 +135,7 @@ const Auth = () => {
                 : "Don't have an account Sign up"}
             </span>
           </div>
-          <button className="button infoButton" type="submit">{isSignup ? "Signup" : "Login"}</button>
+          <button className="button infoButton" type="submit" >{isSignup ? "Signup" : "Login"}</button>
         </form>
       </div>
     </div>
@@ -134,59 +143,5 @@ const Auth = () => {
 }
 
 
-function SignUp() {
-  return (
-    <div className="a-right">
-      <form className="infoForm authForm">
-        <h3>Sign up</h3>
 
-        <div>
-          <input
-            type="text"
-            placeholder="First Name"
-            className="infoInput"
-            name="firstname"
-          />
-          <input
-            type="text"
-            placeholder="Last Name"
-            className="infoInput"
-            name="lastname"
-          />
-        </div>
-
-        <div>
-          <input
-            type="text"
-            className="infoInput"
-            name="username"
-            placeholder="User name"
-          />
-        </div>
-
-        <div>
-          <input
-            type="text"
-            className="infoInput"
-            name="password"
-            placeholder="Password"
-          />
-          <input
-            type="text"
-            className="infoInput"
-            name="confirmpass"
-            placeholder="Confirm Password"
-          />
-        </div>
-
-        <div>
-          <span style={{ fontSize: '12px' }}>Already have an account. Login!</span>
-        </div>
-        <button className="button infoButton" type="submit">Signup</button>
-      </form>
-    </div>
-  );
-
-
-}
 export default Auth
